@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Sort</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <svg width="100%" height="100%"></svg>
+
+  <script src="../lib/d3_5_4_0/d3.js"></script>
+  <script src="./sort.js"></script>
+  <script>
+    var data = genRenderList(0, 50, 20);
+    drawBarChart(data);
+    // (async () => { await runSortCode(bubbleSort, data) })();
+    // (async () => { await runSortCode(selectSort, data) })();
+    // (async () => { await runSortCode(insertSort, data) })();
+    (async () => { await runSortCode(quickSort, data) })();
+  </script>
+</body>
+</html>
