@@ -26,12 +26,11 @@
   <script src="../lib/d3_5_4_0/d3.js"></script>
   <script src="./sort.js"></script>
   <script>
-    var data = genRenderList(0, 50, 20);
-    drawBarChart(data);
-    // (async () => { await runSortCode(bubbleSort, data) })();
-    // (async () => { await runSortCode(selectSort, data) })();
-    // (async () => { await runSortCode(insertSort, data) })();
-    (async () => { await runSortCode(quickSort, data) })();
+    var data = genRenderList(0, 50, 10);
+    // runSortCode(bubbleSort, data, 500);
+    // runSortCode(selectSort, data, 500);
+    // runSortCode(insertSort, data, 500);
+    runSortCode(quickSort, data, 500);
   </script>
 </body>
 </html>
