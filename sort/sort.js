@@ -4,7 +4,7 @@ function drawBarChart(data) {
   svg
     .selectAll('*')
     .remove();
-  var g = svg.append('g');
+  var g = svg.append('g').attr('transform', 'translate(0, 500) rotate(-90, 0, 0)');
   var rects = g
     .selectAll('rect')
     .data(data)
@@ -99,11 +99,16 @@ function runSortCode(sort, data, timeout) {
   var iter = sort(data);
   var run = function () {
     drawBarChart(data);
-    var currentData = iter.next();
-    if (!currentData.done) {
-      data = currentData.value;
+    if (window.running) {
+      var currentData = iter.next();
+      if (!currentData.done) {
+        data = currentData.value;
+        setTimeout(run, timeout);
+      }
+    } else {
       setTimeout(run, timeout);
     }
   };
+  window.running = true;
   setTimeout(run, timeout);
 }

@@ -21,12 +21,13 @@
 </head>
 
 <body>
+  <button onclick="window.running = !window.running;">pause/continue</button>
   <svg width="100%" height="100%"></svg>
 
   <script src="../lib/d3_5_4_0/d3.js"></script>
   <script src="./sort.js"></script>
   <script>
-    var data = genRenderList(0, 50, 10);
+    var data = genRenderList(0, 50, 20);
     // runSortCode(bubbleSort, data, 500);
     // runSortCode(selectSort, data, 500);
     // runSortCode(insertSort, data, 500);
