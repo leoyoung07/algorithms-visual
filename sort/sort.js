@@ -1,10 +1,12 @@
-function drawBarChart(data) {
+function drawBarChart(data, hightLight) {
   var height = 30;
   var svg = d3.select('svg');
   svg
     .selectAll('*')
     .remove();
-  var g = svg.append('g').attr('transform', 'translate(0, 500) rotate(-90, 0, 0)');
+  var g = svg
+    .append('g')
+    .attr('transform', 'translate(0, 500) rotate(-90, 0, 0)');
   var rects = g
     .selectAll('rect')
     .data(data)
@@ -19,7 +21,11 @@ function drawBarChart(data) {
       return d * 10;
     })
     .attr('height', height - 5)
-    .attr('fill', 'red');
+    .attr('fill', function (d, i) {
+      return hightLight && hightLight[i]
+        ? hightLight[i]
+        : 'red';
+    });
 }
 function genRenderList(min, max, size) {
   min = parseInt(min, 10);
@@ -33,24 +39,31 @@ function genRenderList(min, max, size) {
   return list;
 }
 
-Array.prototype.swap = function (i, j) {
+Array.prototype.swap = function * (i, j) {
+  drawBarChart(this, {[i]: 'blue'});
+  yield this;
+  drawBarChart(this, {[i]: 'blue', [j]: 'green'});
+  yield this;
   var tmp = this[j];
   this[j] = this[i];
   this[i] = tmp;
+  drawBarChart(this, {[i]: 'yellow', [j]: 'yellow'});
+  yield this;
+  drawBarChart(this);
+  yield this;
 }
 
 function * bubbleSort(data) {
   for (var i = 0; i < data.length; i++) {
     for (var j = i + 1; j < data.length; j++) {
       if (data[j] < data[i]) {
-        data.swap(i, j);
-        yield data;
+        yield * data.swap(i, j);
       }
     }
   }
 }
 
-function* selectSort(data) {
+function * selectSort(data) {
   for (var i = 0; i < data.length; i++) {
     var minIndex = i;
     for (var j = i + 1; j < data.length; j++) {
@@ -59,23 +72,21 @@ function* selectSort(data) {
       }
     }
     if (minIndex !== i) {
-      data.swap(minIndex, i);
-      yield data;
+      yield * data.swap(minIndex, i);
     }
   }
 }
 
-function* insertSort(data) {
+function * insertSort(data) {
   for (var i = 0; i < data.length; i++) {
     for (var j = i; j > 0 && data[j] < data[j - 1]; j--) {
-      data.swap(j, j - 1);
-      yield data;
+      yield * data.swap(j, j - 1);
     }
   }
 }
 
-function* quickSort(data) {
-  function* sort(l, u) {
+function * quickSort(data) {
+  function * sort(l, u) {
     if (l >= u) {
       return;
     }
@@ -83,25 +94,26 @@ function* quickSort(data) {
     for (var i = l + 1; i <= u; i++) {
       if (data[i] < data[l]) {
         m++;
-        data.swap(m, i);
-        yield data;
+        if (m !== i) {
+          yield * data.swap(m, i);
+        }
       }
     }
-    data.swap(l, m);
-    yield data;
-    yield* sort(l, m - 1);
-    yield* sort(m + 1, u);
+    yield * data.swap(l, m);
+    yield * sort(l, m - 1);
+    yield * sort(m + 1, u);
   }
-  yield* sort(0, data.length - 1);
+  yield * sort(0, data.length - 1);
 }
 
 function runSortCode(sort, data, timeout) {
   var iter = sort(data);
   var run = function () {
-    drawBarChart(data);
     if (window.running) {
       var currentData = iter.next();
-      if (!currentData.done) {
+      if (currentData.done) {
+        alert('done!');
+      } else {
         data = currentData.value;
         setTimeout(run, timeout);
       }
