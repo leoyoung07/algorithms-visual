@@ -1,6 +1,6 @@
 import React from 'react';
-import Sort from './Sort';
 import './App.css';
+import Sort from './Sort';
 
 class App extends React.Component {
   render() {

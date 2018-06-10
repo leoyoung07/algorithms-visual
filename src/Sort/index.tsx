@@ -2,12 +2,29 @@ import * as d3 from 'd3';
 import React from 'react';
 import './index.css';
 
+if (!Array.prototype.swap) {
+  Array.prototype.swap = function*<T>(
+    i: number,
+    j: number
+  ): IterableIterator<Array<T>> {
+    drawBarChart(this, { [i]: 'blue' });
+    yield this;
+    drawBarChart(this, { [i]: 'blue', [j]: 'green' });
+    yield this;
+    var tmp = this[j];
+    this[j] = this[i];
+    this[i] = tmp;
+    drawBarChart(this, { [i]: 'yellow', [j]: 'yellow' });
+    yield this;
+    drawBarChart(this);
+    yield this;
+  };
+}
+
 function drawBarChart(data: Array<number>, hightLight?: {}) {
   var height = 30;
   var svg = d3.select('svg');
-  svg
-    .selectAll('*')
-    .remove();
+  svg.selectAll('*').remove();
   var g = svg
     .append('g')
     .attr('transform', 'translate(0, 500) rotate(-90, 0, 0)');
@@ -18,17 +35,15 @@ function drawBarChart(data: Array<number>, hightLight?: {}) {
     .append('rect');
   rects
     .attr('x', 0)
-    .attr('y', function (d: number, i: number) {
+    .attr('y', function(d: number, i: number) {
       return i * height;
     })
-    .attr('width', function (d: number) {
+    .attr('width', function(d: number) {
       return d * 10;
     })
     .attr('height', height - 5)
-    .attr('fill', function (d: number, i: number) {
-      return hightLight && hightLight[i]
-        ? hightLight[i]
-        : 'red';
+    .attr('fill', function(d: number, i: number) {
+      return hightLight && hightLight[i] ? hightLight[i] : 'red';
     });
 }
 function genRenderList(min: number, max: number, size: number) {
@@ -54,24 +69,19 @@ declare global {
   interface Array<T> {
     swap(i: number, j: number): IterableIterator<Array<T>>;
   }
-
-  // tslint:disable-next-line:interface-name
-  interface Window {
-    running: boolean;
-  }
 }
 
-function * bubbleSort(data: Array<number>) {
+function* bubbleSort(data: Array<number>) {
   for (var i = 0; i < data.length; i++) {
     for (var j = i + 1; j < data.length; j++) {
       if (data[j] < data[i]) {
-        yield * data.swap(i, j);
+        yield* data.swap(i, j);
       }
     }
   }
 }
 
-function * selectSort(data: Array<number>) {
+function* selectSort(data: Array<number>) {
   for (var i = 0; i < data.length; i++) {
     var minIndex = i;
     for (var j = i + 1; j < data.length; j++) {
@@ -80,21 +90,21 @@ function * selectSort(data: Array<number>) {
       }
     }
     if (minIndex !== i) {
-      yield * data.swap(minIndex, i);
+      yield* data.swap(i, minIndex);
     }
   }
 }
 
-function * insertSort(data: Array<number>) {
+function* insertSort(data: Array<number>) {
   for (var i = 0; i < data.length; i++) {
     for (var j = i; j > 0 && data[j] < data[j - 1]; j--) {
-      yield * data.swap(j, j - 1);
+      yield* data.swap(j, j - 1);
     }
   }
 }
 
-function * quickSort(data: Array<number>) {
-  function * sort(l: number, u: number): IterableIterator<Array<number>> {
+function* quickSort(data: Array<number>) {
+  function* sort(l: number, u: number): IterableIterator<Array<number>> {
     if (l >= u) {
       return;
     }
@@ -103,27 +113,25 @@ function * quickSort(data: Array<number>) {
       if (data[i] < data[l]) {
         m++;
         if (m !== i) {
-          yield * data.swap(m, i);
+          yield* data.swap(i, m);
         }
       }
     }
-    yield * data.swap(l, m);
-    yield * sort(l, m - 1);
-    yield * sort(m + 1, u);
+    yield* data.swap(l, m);
+    yield* sort(l, m - 1);
+    yield* sort(m + 1, u);
   }
-  yield * sort(0, data.length - 1);
+  yield* sort(0, data.length - 1);
 }
 
 const sortAlgMap = {
-  'bubble': bubbleSort,
-  'select': selectSort,
-  'insert': insertSort,
-  'quick': quickSort
+  bubble: bubbleSort,
+  select: selectSort,
+  insert: insertSort,
+  quick: quickSort
 };
 
-interface ISortProps {
-
-}
+interface ISortProps {}
 
 interface ISortState {
   running: boolean;
@@ -134,8 +142,7 @@ interface ISortState {
 }
 
 class Sort extends React.Component<ISortProps, ISortState> {
-
-  constructor (props: ISortProps) {
+  constructor(props: ISortProps) {
     super(props);
     this.handleAlgSelectChange = this.handleAlgSelectChange.bind(this);
     this.handleRunCodeBtnClick = this.handleRunCodeBtnClick.bind(this);
@@ -150,29 +157,14 @@ class Sort extends React.Component<ISortProps, ISortState> {
     };
   }
 
-  componentDidMount() {
-    if (!Array.prototype.swap) {
-      Array.prototype.swap = function * <T>(i: number, j: number): IterableIterator<Array<T>> {
-        drawBarChart(this, {[i]: 'blue'});
-        yield this;
-        drawBarChart(this, {[i]: 'blue', [j]: 'green'});
-        yield this;
-        var tmp = this[j];
-        this[j] = this[i];
-        this[i] = tmp;
-        drawBarChart(this, {[i]: 'yellow', [j]: 'yellow'});
-        yield this;
-        drawBarChart(this);
-        yield this;
-      };
-    }
-  }
-
   render() {
     return (
       <div>
-        <select value={this.state.sortAlgName} onChange={this.handleAlgSelectChange}>
-          {Object.keys(sortAlgMap).map((name) => {
+        <select
+          value={this.state.sortAlgName}
+          onChange={this.handleAlgSelectChange}
+        >
+          {Object.keys(sortAlgMap).map(name => {
             return (
               <option key={name} value={name}>
                 {name}
@@ -180,13 +172,9 @@ class Sort extends React.Component<ISortProps, ISortState> {
             );
           })}
         </select>
-        <button onClick={this.handleRunCodeBtnClick}>
-          Run
-        </button>
-        <button onClick={this.handlePauseBtnClick}>
-          Pause/Continue
-        </button>
-        <svg width="100%" height="100%"/>
+        <button onClick={this.handleRunCodeBtnClick}>Run</button>
+        <button onClick={this.handlePauseBtnClick}>Pause/Continue</button>
+        <svg width="100%" height="100%" />
       </div>
     );
   }
@@ -216,7 +204,9 @@ class Sort extends React.Component<ISortProps, ISortState> {
 
   private runSortCode(
     sort: (data: Array<number>) => IterableIterator<Array<number>>,
-    data: Array<number>, timeout: number) {
+    data: Array<number>,
+    timeout: number
+  ) {
     const iter = sort(data);
     const run = () => {
       if (this.state.running) {
