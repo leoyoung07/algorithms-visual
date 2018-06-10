@@ -1,1 +1,1 @@
-# javascript-algorithms-visual
+# algorithms-visual
