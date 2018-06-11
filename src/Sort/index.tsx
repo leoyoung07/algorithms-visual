@@ -11,7 +11,7 @@ if (!Array.prototype.swap) {
     yield this;
     drawBarChart(this, { [i]: 'blue', [j]: 'green' });
     yield this;
-    var tmp = this[j];
+    const tmp = this[j];
     this[j] = this[i];
     this[i] = tmp;
     drawBarChart(this, { [i]: 'yellow', [j]: 'yellow' });
@@ -22,13 +22,13 @@ if (!Array.prototype.swap) {
 }
 
 function drawBarChart(data: Array<number>, hightLight?: {}) {
-  var height = 30;
-  var svg = d3.select('svg');
+  const height = 30;
+  const svg = d3.select('svg');
   svg.selectAll('*').remove();
-  var g = svg
+  const g = svg
     .append('g')
-    .attr('transform', 'translate(0, 500) rotate(-90, 0, 0)');
-  var rects = g
+    .style('transform', 'translate(0, 50%) rotate(-90deg)');
+  const rects = g
     .selectAll('rect')
     .data(data)
     .enter()
@@ -56,9 +56,9 @@ function genRenderList(min: number, max: number, size: number) {
   if (typeof size !== 'number') {
     size = parseInt(size, 10);
   }
-  var list = [];
-  for (var i = 0; i < size; i++) {
-    var rand = min + Math.floor((max - min) * Math.random());
+  const list = [];
+  for (let i = 0; i < size; i++) {
+    const rand = min + Math.floor((max - min) * Math.random());
     list.push(rand);
   }
   return list;
@@ -72,8 +72,8 @@ declare global {
 }
 
 function* bubbleSort(data: Array<number>) {
-  for (var i = 0; i < data.length; i++) {
-    for (var j = i + 1; j < data.length; j++) {
+  for (let i = 0; i < data.length; i++) {
+    for (let j = i + 1; j < data.length; j++) {
       if (data[j] < data[i]) {
         yield* data.swap(i, j);
       }
@@ -82,9 +82,9 @@ function* bubbleSort(data: Array<number>) {
 }
 
 function* selectSort(data: Array<number>) {
-  for (var i = 0; i < data.length; i++) {
-    var minIndex = i;
-    for (var j = i + 1; j < data.length; j++) {
+  for (let i = 0; i < data.length; i++) {
+    let minIndex = i;
+    for (let j = i + 1; j < data.length; j++) {
       if (data[j] < data[minIndex]) {
         minIndex = j;
       }
@@ -96,8 +96,8 @@ function* selectSort(data: Array<number>) {
 }
 
 function* insertSort(data: Array<number>) {
-  for (var i = 0; i < data.length; i++) {
-    for (var j = i; j > 0 && data[j] < data[j - 1]; j--) {
+  for (let i = 0; i < data.length; i++) {
+    for (let j = i; j > 0 && data[j] < data[j - 1]; j--) {
       yield* data.swap(j, j - 1);
     }
   }
@@ -108,8 +108,8 @@ function* quickSort(data: Array<number>) {
     if (l >= u) {
       return;
     }
-    var m = l;
-    for (var i = l + 1; i <= u; i++) {
+    let m = l;
+    for (let i = l + 1; i <= u; i++) {
       if (data[i] < data[l]) {
         m++;
         if (m !== i) {
@@ -117,7 +117,9 @@ function* quickSort(data: Array<number>) {
         }
       }
     }
-    yield* data.swap(l, m);
+    if (m !== l) {
+      yield* data.swap(l, m);
+    }
     yield* sort(l, m - 1);
     yield* sort(m + 1, u);
   }
