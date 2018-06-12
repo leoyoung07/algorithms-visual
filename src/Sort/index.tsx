@@ -1,5 +1,7 @@
 import * as d3 from 'd3';
 import React from 'react';
+import Button from '../Components/Button';
+import Select from '../Components/Select';
 import './index.css';
 
 if (!Array.prototype.swap) {
@@ -162,9 +164,9 @@ class Sort extends React.Component<ISortProps, ISortState> {
   render() {
     return (
       <div>
-        <select
+        <Select
           value={this.state.sortAlgName}
-          onChange={this.handleAlgSelectChange}
+          handleChange={this.handleAlgSelectChange}
         >
           {Object.keys(sortAlgMap).map(name => {
             return (
@@ -173,9 +175,9 @@ class Sort extends React.Component<ISortProps, ISortState> {
               </option>
             );
           })}
-        </select>
-        <button onClick={this.handleRunCodeBtnClick}>Run</button>
-        <button onClick={this.handlePauseBtnClick}>Pause/Continue</button>
+        </Select>
+        <Button handleClick={this.handleRunCodeBtnClick}>Run</Button>
+        <Button handleClick={this.handlePauseBtnClick}>Pause/Continue</Button>
         <svg width="100%" height="100%" />
       </div>
     );
