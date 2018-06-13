@@ -1,12 +1,15 @@
 import React from 'react';
+import { Link } from 'react-router';
 import './App.css';
-import Sort from './Sort';
 
 class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <Sort />
+        <h1>App</h1>
+        <ul>
+          <li><Link to="/sort">Sort</Link></li>
+        </ul>
       </div>
     );
   }
