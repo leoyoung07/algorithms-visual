@@ -24,26 +24,34 @@ if (!Array.prototype.swap) {
 }
 
 function drawBarChart(data: Array<number>, hightLight?: {}) {
-  const height = 30;
+  const height = 400;
+  const width = 30;
+  const max = Math.max(...data);
+  const min = Math.min(...data);
+  const scale = d3.scaleLinear().domain([min, max]).range([0, height]);
+
   const svg = d3.select('svg');
   svg.selectAll('*').remove();
   const g = svg
-    .append('g')
-    .style('transform', 'translate(0, 50%) rotate(-90deg)');
+    .append('g');
   const rects = g
     .selectAll('rect')
     .data(data)
     .enter()
     .append('rect');
   rects
-    .attr('x', 0)
+    .attr('x', function(d: number, i: number) {
+      return width * i;
+    })
     .attr('y', function(d: number, i: number) {
-      return i * height;
+      return height - scale(d);
     })
-    .attr('width', function(d: number) {
-      return d * 10;
+    .attr('width', function(d: number, i: number) {
+      return width - 5;
     })
-    .attr('height', height - 5)
+    .attr('height', function(d: number, i: number) {
+      return scale(d);
+    })
     .attr('fill', function(d: number, i: number) {
       return hightLight && hightLight[i] ? hightLight[i] : 'red';
     });
