@@ -9,6 +9,7 @@ class App extends React.Component {
         <h1>App</h1>
         <ul>
           <li><Link to="/sort">Sort</Link></li>
+          <li><Link to="/trees">Trees</Link></li>
         </ul>
       </div>
     );

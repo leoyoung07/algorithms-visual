@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface IButtonProps {
-  handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  handleClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 interface IButtonState {
