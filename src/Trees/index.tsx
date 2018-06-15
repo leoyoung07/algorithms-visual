@@ -26,6 +26,9 @@ const nodesData: ITree = {
     }, {
       value: 4,
       children: null
+    }, {
+      value: 7,
+      children: null
     }]
   }, {
     value: 2,
@@ -35,13 +38,19 @@ const nodesData: ITree = {
     }, {
       value: 6,
       children: null
+    }, {
+      value: 7,
+      children: null
+    }, {
+      value: 7,
+      children: null
     }]
   }]
 };
 
 function drawTrees(nodes: Array<ITree>, range: {l: number, r: number}, level: number) {
   const height = 50;
-  const margin = (range.r - range.l) / 2;
+  const margin = (range.r - range.l) / (nodes.length + 1);
   const svg = d3.select('svg');
   const radius = 10;
   // svg
@@ -64,17 +73,31 @@ function drawTrees(nodes: Array<ITree>, range: {l: number, r: number}, level: nu
       return radius;
     })
     .attr('fill', 'red');
+  let nodeNum = 0;
   nodes.forEach((node, i) => {
     if (node.children) {
-      drawTrees(node.children, {l: range.l + i * margin, r: range.l + (i + 1) * margin}, level + 1);
+      nodeNum += node.children.length;
     }
   });
+  let lastL = range.l;
+  nodes.forEach((node, i) => {
+    if (node.children) {
+      const step = ((range.r - range.l) / nodeNum) * node.children.length;
+      drawTrees(node.children, {l: lastL, r: lastL + step}, level + 1);
+      lastL = lastL + step;
+    }
+  });
+}
+
+function drawChart(data: ITree) {
+  d3.select('svg').selectAll('*').remove();
+  drawTrees([data], {l: 0, r: 500}, 1);
 }
 class Trees extends React.Component < ITreesProps,
 ITreesState > {
 
   componentDidMount() {
-    drawTrees([nodesData], {l: 0, r: 500}, 1);
+    drawChart(nodesData);
   }
 
   render() {
