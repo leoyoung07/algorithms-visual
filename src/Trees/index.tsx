@@ -26,9 +26,6 @@ const nodesData: ITree = {
     }, {
       value: 4,
       children: null
-    }, {
-      value: 7,
-      children: null
     }]
   }, {
     value: 2,
@@ -42,7 +39,7 @@ const nodesData: ITree = {
       value: 7,
       children: null
     }, {
-      value: 7,
+      value: 8,
       children: null
     }]
   }]
@@ -52,16 +49,14 @@ function drawTrees(nodes: Array<ITree>, range: {l: number, r: number}, level: nu
   const height = 50;
   const margin = (range.r - range.l) / (nodes.length + 1);
   const svg = d3.select('svg');
-  const radius = 10;
-  // svg
-  //   .selectAll('*')
-  //   .remove();
-  const g = svg.append('g');
-  const circles = g
+  const radius = 15;
+
+  const g = svg.append('g')
     .selectAll('circle')
     .data(nodes)
     .enter()
-    .append('circle');
+    .append('g');
+  const circles = g.append('circle');
   circles
     .attr('cx', function (d: ITree, i: number) {
       return range.l + (i + 1) * margin;
@@ -73,6 +68,16 @@ function drawTrees(nodes: Array<ITree>, range: {l: number, r: number}, level: nu
       return radius;
     })
     .attr('fill', 'red');
+  const text = g.append('text');
+  text.attr('dx', function (d: ITree, i: number) {
+      return range.l + (i + 1) * margin - 5;
+    })
+    .attr('dy', function (d: ITree, i: number) {
+      return level * height + 5;
+    })
+    .text(function (d: ITree) {
+      return d.value;
+    });
   let nodeNum = 0;
   nodes.forEach((node, i) => {
     if (node.children) {
