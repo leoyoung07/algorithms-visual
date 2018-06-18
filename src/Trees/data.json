@@ -1,0 +1,84 @@
+{
+  "value": 0,
+  "x": 0,
+  "y": 0,
+  "r": 15,
+  "color": "white",
+  "bgColor": "green",
+  "children": [
+    {
+      "value": 1,
+      "x": 0,
+      "y": 0,
+      "r": 15,
+      "color": "white",
+      "bgColor": "red",
+      "children": [
+        {
+          "value": 3,
+          "x": 0,
+          "y": 0,
+          "r": 15,
+          "color": "white",
+          "bgColor": "red",
+          "children": null
+        },
+        {
+          "value": 4,
+          "x": 0,
+          "y": 0,
+          "r": 15,
+          "color": "white",
+          "bgColor": "red",
+          "children": null
+        }
+      ]
+    },
+    {
+      "value": 2,
+      "x": 0,
+      "y": 0,
+      "r": 15,
+      "color": "white",
+      "bgColor": "red",
+      "children": [
+        {
+          "value": 5,
+          "x": 0,
+          "y": 0,
+          "r": 15,
+          "color": "white",
+          "bgColor": "red",
+          "children": null
+        },
+        {
+          "value": 6,
+          "x": 0,
+          "y": 0,
+          "r": 15,
+          "color": "white",
+          "bgColor": "blue",
+          "children": null
+        },
+        {
+          "value": 7,
+          "x": 0,
+          "y": 0,
+          "r": 15,
+          "color": "white",
+          "bgColor": "red",
+          "children": null
+        },
+        {
+          "value": 8,
+          "x": 0,
+          "y": 0,
+          "r": 15,
+          "color": "white",
+          "bgColor": "red",
+          "children": null
+        }
+      ]
+    }
+  ]
+}

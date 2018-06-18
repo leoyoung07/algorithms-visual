@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 import React from 'react';
 import Button from '../Components/Button';
 import Select from '../Components/Select';
+import data from './data.json';
 interface ITreesProps {}
 
 interface ITreesState {}
@@ -21,79 +22,7 @@ interface ITree {
   bgColor: string;
 }
 
-const nodesData: ITree = {
-  value: 0,
-  x: 0,
-  y: 0,
-  r: 15,
-  color: 'white',
-  bgColor: 'green',
-  children: [{
-    value: 1,
-    x: 0,
-    y: 0,
-    r: 15,
-    color: 'white',
-    bgColor: 'red',
-    children: [{
-      value: 3,
-      x: 0,
-      y: 0,
-      r: 15,
-      color: 'white',
-      bgColor: 'red',
-      children: null
-    }, {
-      value: 4,
-      x: 0,
-      y: 0,
-      r: 15,
-      color: 'white',
-      bgColor: 'red',
-      children: null
-    }]
-  }, {
-    value: 2,
-    x: 0,
-    y: 0,
-    r: 15,
-    color: 'white',
-    bgColor: 'red',
-    children: [{
-      value: 5,
-      x: 0,
-      y: 0,
-      r: 15,
-      color: 'white',
-      bgColor: 'red',
-      children: null
-    }, {
-      value: 6,
-      x: 0,
-      y: 0,
-      r: 15,
-      color: 'white',
-      bgColor: 'blue',
-      children: null
-    }, {
-      value: 7,
-      x: 0,
-      y: 0,
-      r: 15,
-      color: 'white',
-      bgColor: 'red',
-      children: null
-    }, {
-      value: 8,
-      x: 0,
-      y: 0,
-      r: 15,
-      color: 'white',
-      bgColor: 'red',
-      children: null
-    }]
-  }]
-};
+const nodesData: ITree = data as ITree;
 
 function drawTrees(nodes: Array<ITree>, range: {l: number, r: number}, level: number, parent?: ITree) {
   const height = 50;
@@ -182,9 +111,9 @@ function drawTrees(nodes: Array<ITree>, range: {l: number, r: number}, level: nu
     });
 }
 
-function drawChart(data: ITree) {
+function drawChart(tree: ITree) {
   d3.select('svg').selectAll('*').remove();
-  drawTrees([data], {l: 0, r: 500}, 1);
+  drawTrees([tree], {l: 0, r: 500}, 1);
 }
 class Trees extends React.Component < ITreesProps,
 ITreesState > {
