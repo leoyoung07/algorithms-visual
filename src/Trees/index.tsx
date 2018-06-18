@@ -1,8 +1,8 @@
 import React from 'react';
 import Button from '../Components/Button';
 import Select from '../Components/Select';
+import TreeChart, { ITree } from '../Components/TreeChart';
 import data from './data.json';
-import TreeChart, { ITree } from './TreeChart';
 interface ITreesProps {}
 
 interface ITreesState {
@@ -18,6 +18,7 @@ ITreesState > {
 
   constructor(props: ITreesProps) {
     super(props);
+    this.handleRunBtnClick = this.handleRunBtnClick.bind(this);
     this.state = {
       tree: data as ITree
     };
@@ -35,12 +36,29 @@ ITreesState > {
               );
             })}
         </Select>
-        <Button>
+        <Button handleClick={this.handleRunBtnClick}>
           Run
         </Button>
         <TreeChart tree={this.state.tree}/>
       </div>
     );
+  }
+  private handleRunBtnClick(e: React.MouseEvent<HTMLButtonElement>) {
+    this.depthFirstSearch(this.state.tree, this.state.tree);
+  }
+
+  private depthFirstSearch(root: ITree, tree: ITree) {
+    const newRoot = JSON.parse(JSON.stringify(root));
+    this.visitTreeNode(tree);
+    if (tree.children) {
+      tree.children.forEach((child: ITree) => {
+        this.depthFirstSearch(root, child);
+      });
+    }
+  }
+
+  private visitTreeNode(treeNode: ITree) {
+    treeNode.color = 'red';
   }
 }
 
