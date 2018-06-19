@@ -43,22 +43,28 @@ ITreesState > {
       </div>
     );
   }
-  private handleRunBtnClick(e: React.MouseEvent<HTMLButtonElement>) {
-    this.depthFirstSearch(this.state.tree, this.state.tree);
+  private async handleRunBtnClick(e: React.MouseEvent<HTMLButtonElement>) {
+    await this.depthFirstSearch(this.state.tree, this.state.tree);
   }
 
-  private depthFirstSearch(root: ITree, tree: ITree) {
-    const newRoot = JSON.parse(JSON.stringify(root));
-    this.visitTreeNode(tree);
-    if (tree.children) {
-      tree.children.forEach((child: ITree) => {
-        this.depthFirstSearch(root, child);
-      });
+  private async depthFirstSearch(root: ITree, treeNode: ITree) {
+    await this.visitTreeNode(root, treeNode);
+    if (treeNode.children) {
+      for (const child of treeNode.children) {
+        await this.depthFirstSearch(root, child);
+      }
     }
   }
 
-  private visitTreeNode(treeNode: ITree) {
-    treeNode.color = 'red';
+  private visitTreeNode(root: ITree, treeNode: ITree) {
+    return new Promise((resolve, reject) => {
+      window.setTimeout(() => {
+        treeNode.bgColor = 'red';
+        this.setState({
+          tree: root
+        }, () => { resolve(); });
+      }, 1000);
+    });
   }
 }
 

@@ -30,7 +30,17 @@
           "r": 15,
           "color": "white",
           "bgColor": "black",
-          "children": null
+          "children": [
+            {
+              "value": 9,
+              "x": 0,
+              "y": 0,
+              "r": 15,
+              "color": "white",
+              "bgColor": "black",
+              "children": null
+            }
+          ]
         }
       ]
     },
