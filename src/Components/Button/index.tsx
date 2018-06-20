@@ -4,12 +4,9 @@ interface IButtonProps {
   handleClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-interface IButtonState {
-
-}
+interface IButtonState {}
 class Button extends React.Component<IButtonProps, IButtonState> {
-
-  constructor (props: IButtonProps) {
+  constructor(props: IButtonProps) {
     super(props);
   }
   render() {

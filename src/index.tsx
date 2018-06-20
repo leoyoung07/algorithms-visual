@@ -7,11 +7,12 @@ import registerServiceWorker from './registerServiceWorker';
 import Sort from './Sort';
 import Trees from './Trees';
 
-ReactDOM.render((
+ReactDOM.render(
   <Router history={hashHistory}>
     <Route path="/" component={App} />
-    <Route path="/sort" component={Sort}/>
-    <Route path="/trees" component={Trees}/>
-  </Router>
-), document.getElementById('root') as HTMLElement);
+    <Route path="/sort" component={Sort} />
+    <Route path="/trees" component={Trees} />
+  </Router>,
+  document.getElementById('root') as HTMLElement
+);
 registerServiceWorker();

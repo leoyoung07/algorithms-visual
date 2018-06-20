@@ -8,8 +8,12 @@ class App extends React.Component {
       <div className="App">
         <h1>App</h1>
         <ul>
-          <li><Link to="/sort">Sort</Link></li>
-          <li><Link to="/trees">Trees</Link></li>
+          <li>
+            <Link to="/sort">Sort</Link>
+          </li>
+          <li>
+            <Link to="/trees">Trees</Link>
+          </li>
         </ul>
       </div>
     );

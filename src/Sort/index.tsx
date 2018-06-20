@@ -28,12 +28,14 @@ function drawBarChart(data: Array<number>, hightLight?: {}) {
   const width = 30;
   const max = Math.max(...data);
   const min = Math.min(...data);
-  const scale = d3.scaleLinear().domain([min, max]).range([0, height]);
+  const scale = d3
+    .scaleLinear()
+    .domain([min, max])
+    .range([0, height]);
 
   const svg = d3.select('svg');
   svg.selectAll('*').remove();
-  const g = svg
-    .append('g');
+  const g = svg.append('g');
   const rects = g
     .selectAll('rect')
     .data(data)

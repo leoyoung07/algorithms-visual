@@ -13,9 +13,7 @@ const treeSearchAlgs = {
   DepthFirstSearch: 'DepthFirstSearch',
   BreadthFirstSearch: 'BreadthFirstSearch'
 };
-class Trees extends React.Component < ITreesProps,
-ITreesState > {
-
+class Trees extends React.Component<ITreesProps, ITreesState> {
   constructor(props: ITreesProps) {
     super(props);
     this.handleRunBtnClick = this.handleRunBtnClick.bind(this);
@@ -28,18 +26,16 @@ ITreesState > {
     return (
       <div>
         <Select>
-          {Object
-            .keys(treeSearchAlgs)
-            .map((text) => {
-              return (
-                <option key={text} value={text}>{text}</option>
-              );
-            })}
+          {Object.keys(treeSearchAlgs).map(text => {
+            return (
+              <option key={text} value={text}>
+                {text}
+              </option>
+            );
+          })}
         </Select>
-        <Button handleClick={this.handleRunBtnClick}>
-          Run
-        </Button>
-        <TreeChart tree={this.state.tree}/>
+        <Button handleClick={this.handleRunBtnClick}>Run</Button>
+        <TreeChart tree={this.state.tree} />
       </div>
     );
   }
@@ -48,11 +44,14 @@ ITreesState > {
     return JSON.parse(JSON.stringify(d)) as ITree;
   }
   private handleRunBtnClick(e: React.MouseEvent<HTMLButtonElement>) {
-    this.setState({
-      tree: this.getDataCopy(data as ITree)
-    }, async () => {
-      await this.depthFirstSearch(this.state.tree, this.state.tree);
-    });
+    this.setState(
+      {
+        tree: this.getDataCopy(data as ITree)
+      },
+      async () => {
+        await this.depthFirstSearch(this.state.tree, this.state.tree);
+      }
+    );
   }
 
   private async depthFirstSearch(root: ITree, treeNode: ITree) {
@@ -68,9 +67,14 @@ ITreesState > {
     return new Promise((resolve, reject) => {
       window.setTimeout(() => {
         treeNode.bgColor = 'red';
-        this.setState({
-          tree: root
-        }, () => { resolve(); });
+        this.setState(
+          {
+            tree: root
+          },
+          () => {
+            resolve();
+          }
+        );
       }, 1000);
     });
   }

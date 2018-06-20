@@ -15,11 +15,8 @@ interface ITreeChartProps {
   tree: ITree;
 }
 
-interface ITreeChartState {
-
-}
+interface ITreeChartState {}
 class TreeChart extends React.Component<ITreeChartProps, ITreeChartState> {
-
   constructor(props: ITreeChartProps) {
     super(props);
   }
@@ -33,16 +30,21 @@ class TreeChart extends React.Component<ITreeChartProps, ITreeChartState> {
   }
 
   render() {
-    return (
-      <svg width="100%" height="100%"/>
-    );
+    return <svg width="100%" height="100%" />;
   }
 
   private drawChart(tree: ITree) {
-    d3.select('svg').selectAll('*').remove();
-    this.drawTrees([tree], {l: 0, r: 500}, 1);
+    d3.select('svg')
+      .selectAll('*')
+      .remove();
+    this.drawTrees([tree], { l: 0, r: 500 }, 1);
   }
-  private drawTrees(nodes: Array<ITree>, range: {l: number, r: number}, level: number, parent?: ITree) {
+  private drawTrees(
+    nodes: Array<ITree>,
+    range: { l: number; r: number },
+    level: number,
+    parent?: ITree
+  ) {
     const height = 50;
     const margin = (range.r - range.l) / nodes.length;
     const offset = margin / 2;
@@ -59,7 +61,12 @@ class TreeChart extends React.Component<ITreeChartProps, ITreeChartState> {
     nodes.forEach((node, i) => {
       if (node.children) {
         const step = ((range.r - range.l) / nodeNum) * node.children.length;
-        this.drawTrees(node.children, {l: lastL, r: lastL + step}, level + 1, node);
+        this.drawTrees(
+          node.children,
+          { l: lastL, r: lastL + step },
+          level + 1,
+          node
+        );
         lastL = lastL + step;
       }
     });
@@ -69,20 +76,20 @@ class TreeChart extends React.Component<ITreeChartProps, ITreeChartState> {
     if (parent) {
       const edgeG = g.append('g');
       const edges = edgeG
-      .selectAll('line')
-      .data(nodes)
-      .enter()
-      .append('line');
+        .selectAll('line')
+        .data(nodes)
+        .enter()
+        .append('line');
       edges
         .attr('x1', parent.x)
         .attr('y1', parent.y)
-        .attr('x2', function (d: ITree, i: number) {
+        .attr('x2', function(d: ITree, i: number) {
           return range.l + offset + i * margin;
         })
-        .attr('y2', function (d: ITree, i: number) {
+        .attr('y2', function(d: ITree, i: number) {
           return level * height;
         })
-        .style('stroke', function (d: ITree, i: number) {
+        .style('stroke', function(d: ITree, i: number) {
           return d.bgColor;
         })
         .style('stroke-width', '1')
@@ -96,16 +103,16 @@ class TreeChart extends React.Component<ITreeChartProps, ITreeChartState> {
       .enter()
       .append('circle');
     circles
-      .attr('cx', function (d: ITree, i: number) {
+      .attr('cx', function(d: ITree, i: number) {
         return d.x;
       })
-      .attr('cy', function (d: ITree, i: number) {
+      .attr('cy', function(d: ITree, i: number) {
         return d.y;
       })
-      .attr('r', function (d: ITree, i: number) {
+      .attr('r', function(d: ITree, i: number) {
         return d.r;
       })
-      .attr('fill', function (d: ITree, i: number) {
+      .attr('fill', function(d: ITree, i: number) {
         return d.bgColor;
       });
 
@@ -115,17 +122,18 @@ class TreeChart extends React.Component<ITreeChartProps, ITreeChartState> {
       .data(nodes)
       .enter()
       .append('text');
-    text.attr('x', function (d: ITree, i: number) {
+    text
+      .attr('x', function(d: ITree, i: number) {
         return d.x;
       })
-      .attr('y', function (d: ITree, i: number) {
+      .attr('y', function(d: ITree, i: number) {
         return d.y;
       })
-      .attr('fill', function (d: ITree, i: number) {
+      .attr('fill', function(d: ITree, i: number) {
         return d.color;
       })
       .attr('dy', '0.1em')
-      .text(function (d: ITree) {
+      .text(function(d: ITree) {
         return d.value;
       })
       .style('text-anchor', 'middle')
