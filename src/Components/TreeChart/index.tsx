@@ -115,18 +115,21 @@ class TreeChart extends React.Component<ITreeChartProps, ITreeChartState> {
       .data(nodes)
       .enter()
       .append('text');
-    text.attr('dx', function (d: ITree, i: number) {
-        return d.x - 5;
+    text.attr('x', function (d: ITree, i: number) {
+        return d.x;
       })
-      .attr('dy', function (d: ITree, i: number) {
-        return d.y + 5;
-      })
-      .text(function (d: ITree) {
-        return d.value;
+      .attr('y', function (d: ITree, i: number) {
+        return d.y;
       })
       .attr('fill', function (d: ITree, i: number) {
         return d.color;
-      });
+      })
+      .attr('dy', '0.1em')
+      .text(function (d: ITree) {
+        return d.value;
+      })
+      .style('text-anchor', 'middle')
+      .style('dominant-baseline', 'middle');
   }
 }
 

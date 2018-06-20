@@ -20,7 +20,7 @@ ITreesState > {
     super(props);
     this.handleRunBtnClick = this.handleRunBtnClick.bind(this);
     this.state = {
-      tree: data as ITree
+      tree: this.getDataCopy(data as ITree)
     };
   }
 
@@ -43,8 +43,16 @@ ITreesState > {
       </div>
     );
   }
-  private async handleRunBtnClick(e: React.MouseEvent<HTMLButtonElement>) {
-    await this.depthFirstSearch(this.state.tree, this.state.tree);
+
+  private getDataCopy(d: ITree) {
+    return JSON.parse(JSON.stringify(d)) as ITree;
+  }
+  private handleRunBtnClick(e: React.MouseEvent<HTMLButtonElement>) {
+    this.setState({
+      tree: this.getDataCopy(data as ITree)
+    }, async () => {
+      await this.depthFirstSearch(this.state.tree, this.state.tree);
+    });
   }
 
   private async depthFirstSearch(root: ITree, treeNode: ITree) {
