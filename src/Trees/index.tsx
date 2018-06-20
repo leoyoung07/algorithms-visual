@@ -7,26 +7,40 @@ interface ITreesProps {}
 
 interface ITreesState {
   tree: ITree;
+  searchAlg: (root: ITree, treeNode: ITree) => void;
+  searchAlgName: string;
 }
 
-const treeSearchAlgs = {
-  DepthFirstSearch: 'DepthFirstSearch',
-  BreadthFirstSearch: 'BreadthFirstSearch'
-};
 class Trees extends React.Component<ITreesProps, ITreesState> {
+
+  private treeSearchAlgs: {
+    DepthFirstSearch: (root: ITree, treeNode: ITree) => void,
+    BreadthFirstSearch: (root: ITree, treeNode: ITree) => void
+  };
   constructor(props: ITreesProps) {
     super(props);
     this.handleRunBtnClick = this.handleRunBtnClick.bind(this);
+    this.handleAlgSelectChange = this.handleAlgSelectChange.bind(this);
+    this.depthFirstSearch = this.depthFirstSearch.bind(this);
+    this.breadthFirstSearch = this.breadthFirstSearch.bind(this);
+
+    this.treeSearchAlgs = {
+      DepthFirstSearch: this.depthFirstSearch,
+      BreadthFirstSearch: this.breadthFirstSearch
+    };
+
+    const algName = 'DepthFirstSearch';
     this.state = {
-      tree: this.getDataCopy(data as ITree)
+      tree: this.getDataCopy(data as ITree),
+      searchAlgName: algName,
+      searchAlg: this.treeSearchAlgs[algName]
     };
   }
-
   render() {
     return (
       <div>
-        <Select>
-          {Object.keys(treeSearchAlgs).map(text => {
+        <Select value={this.state.searchAlgName} handleChange={this.handleAlgSelectChange}>
+          {Object.keys(this.treeSearchAlgs).map(text => {
             return (
               <option key={text} value={text}>
                 {text}
@@ -49,9 +63,19 @@ class Trees extends React.Component<ITreesProps, ITreesState> {
         tree: this.getDataCopy(data as ITree)
       },
       async () => {
-        await this.depthFirstSearch(this.state.tree, this.state.tree);
+        await this.state.searchAlg(this.state.tree, this.state.tree);
       }
     );
+  }
+
+  private handleAlgSelectChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const algName = e.target.value;
+    if (algName) {
+      this.setState({
+        searchAlgName: algName,
+        searchAlg: this.treeSearchAlgs[algName]
+      });
+    }
   }
 
   private async depthFirstSearch(root: ITree, treeNode: ITree) {
@@ -61,6 +85,23 @@ class Trees extends React.Component<ITreesProps, ITreesState> {
         await this.depthFirstSearch(root, child);
       }
     }
+  }
+
+  private async breadthFirstSearch(root: ITree, treeNode: ITree) {
+    const queue: Array<ITree> = [];
+    const search = async (r: ITree, t: ITree) => {
+      await this.visitTreeNode(r, t);
+      if (t.children) {
+        for (const child of t.children) {
+          queue.push(child);
+        }
+      }
+      let node: ITree | undefined;
+      while (node = queue.shift()) {
+        await search(r, node);
+      }
+    };
+    await search(root, treeNode);
   }
 
   private visitTreeNode(root: ITree, treeNode: ITree) {
@@ -75,7 +116,7 @@ class Trees extends React.Component<ITreesProps, ITreesState> {
             resolve();
           }
         );
-      }, 1000);
+      }, 500);
     });
   }
 }
