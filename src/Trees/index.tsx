@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '../Components/Button';
 import Select from '../Components/Select';
 import TreeChart, { ITree } from '../Components/TreeChart';
+import { Queue } from '../DataStructures';
 import data from './data.json';
 
 type TreeSearch = (root: ITree, treeNode: ITree) => void;
@@ -14,10 +15,9 @@ interface ITreesState {
 }
 
 class Trees extends React.Component<ITreesProps, ITreesState> {
-
   private treeSearchAlgs: {
-    DepthFirstSearch: TreeSearch,
-    BreadthFirstSearch: TreeSearch
+    DepthFirstSearch: TreeSearch;
+    BreadthFirstSearch: TreeSearch;
   };
   constructor(props: ITreesProps) {
     super(props);
@@ -41,7 +41,10 @@ class Trees extends React.Component<ITreesProps, ITreesState> {
   render() {
     return (
       <div>
-        <Select value={this.state.searchAlgName} handleChange={this.handleAlgSelectChange}>
+        <Select
+          value={this.state.searchAlgName}
+          handleChange={this.handleAlgSelectChange}
+        >
           {Object.keys(this.treeSearchAlgs).map(text => {
             return (
               <option key={text} value={text}>
@@ -66,6 +69,8 @@ class Trees extends React.Component<ITreesProps, ITreesState> {
       },
       async () => {
         await this.state.searchAlg(this.state.tree, this.state.tree);
+        // tslint:disable-next-line:no-console
+        console.log('Done!');
       }
     );
   }
@@ -90,16 +95,29 @@ class Trees extends React.Component<ITreesProps, ITreesState> {
   }
 
   private async breadthFirstSearch(root: ITree, treeNode: ITree) {
-    const queue: Array<ITree> = [];
+    const queue = new Queue<ITree>(
+      (e, q) => {
+        if (e) {
+          // tslint:disable-next-line:no-console
+          console.log('Enqueue: ' + e.value);
+        }
+      },
+      (e, q) => {
+        if (e) {
+          // tslint:disable-next-line:no-console
+          console.log('Dequeue: ' + e.value);
+        }
+      }
+    );
     const search = async (r: ITree, t: ITree) => {
       await this.visitTreeNode(r, t);
       if (t.children) {
         for (const child of t.children) {
-          queue.push(child);
+          queue.Enqueue(child);
         }
       }
       let node: ITree | undefined;
-      while (node = queue.shift()) {
+      while ((node = queue.Dequeue())) {
         await search(r, node);
       }
     };
@@ -110,6 +128,8 @@ class Trees extends React.Component<ITreesProps, ITreesState> {
     return new Promise((resolve, reject) => {
       window.setTimeout(() => {
         treeNode.bgColor = 'red';
+        // tslint:disable-next-line:no-console
+        console.log('Visit: ' + treeNode.value);
         this.setState(
           {
             tree: root
