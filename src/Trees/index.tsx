@@ -3,19 +3,21 @@ import Button from '../Components/Button';
 import Select from '../Components/Select';
 import TreeChart, { ITree } from '../Components/TreeChart';
 import data from './data.json';
+
+type TreeSearch = (root: ITree, treeNode: ITree) => void;
 interface ITreesProps {}
 
 interface ITreesState {
   tree: ITree;
-  searchAlg: (root: ITree, treeNode: ITree) => void;
+  searchAlg: TreeSearch;
   searchAlgName: string;
 }
 
 class Trees extends React.Component<ITreesProps, ITreesState> {
 
   private treeSearchAlgs: {
-    DepthFirstSearch: (root: ITree, treeNode: ITree) => void,
-    BreadthFirstSearch: (root: ITree, treeNode: ITree) => void
+    DepthFirstSearch: TreeSearch,
+    BreadthFirstSearch: TreeSearch
   };
   constructor(props: ITreesProps) {
     super(props);
