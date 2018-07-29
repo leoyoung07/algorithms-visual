@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '../Components/Button';
 import Select from '../Components/Select';
 import TreeChart, { ITree } from '../Components/TreeChart';
-import { Queue } from '../DataStructures';
+import { Queue } from '../Utils';
 import data from './data.json';
 
 type TreeSearch = (root: ITree, treeNode: ITree) => void;

@@ -12,6 +12,7 @@ ReactDOM.render(
     <Route path="/" component={App} />
     <Route path="/sort" component={Sort} />
     <Route path="/trees" component={Trees} />
+    <Route path="/data-structures" />
   </Router>,
   document.getElementById('root') as HTMLElement
 );
